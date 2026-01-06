@@ -1,5 +1,6 @@
-from playwright.sync_api import Page, expect
 import logging
+from urllib.parse import urlencode, parse_qs
+from playwright.sync_api import Page, Route, expect
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +39,28 @@ class LoginOrSignupPage:
 
         from pages.home_page import HomePage
         return HomePage(self.page)
+    
+    def login_via_wrong_password(self, user: dict):
+
+        def intercept_login_request(route: Route):
+            request = route.request
+            if route.request.method != "POST" or not request.post_data:
+                route.continue_()
+                return
+            logger.info("Injecting wrong password into login POST request")
+            parsed = parse_qs(request.post_data, keep_blank_values=True)
+            if "password" in parsed:
+                parsed["password"] = ["wrongpassword"]
+            else:
+                logger.warning("Password field not found in POST data")
+            route.continue_(post_data=urlencode(parsed, doseq=True))
+
+        self.page.route("**/login", intercept_login_request, times=1)
+        logger.info("Starting login")
+        login_form = self.page.locator("form").filter(has_text="Login")
+        login_form.get_by_placeholder(**self.EMAIL_INPUT).fill(user["email"])
+        login_form.get_by_role(**self.PASSWORD_INPUT).fill(user["password"])
+        self.page.get_by_role(**self.LOGIN_BUTTON).click()
         
     def start_signup(self, user: dict):
         logger.info("Starting signup")
@@ -74,3 +97,6 @@ class LoginOrSignupPage:
 
         from pages.home_page import HomePage
         return HomePage(self.page)
+    
+    def assert_authentication_error(self, text):
+        expect(self.page.locator("#form")).to_contain_text(text)
