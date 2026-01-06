@@ -22,3 +22,16 @@ def test_login_with_incorrect_password(home_page, existing_user):
     login_page = home_page.go_to_login_or_signup()
     login_page.login_via_wrong_password(existing_user)
     login_page.assert_authentication_error("Your email or password is incorrect!")
+
+@pytest.mark.smoke
+def test_register_user_with_existing_email(home_page, existing_user):
+    signup_page = home_page.go_to_login_or_signup()
+    signup_page.start_signup(existing_user)
+    signup_page.assert_authentication_error("Email Address already exist!")
+
+@pytest.mark.smoke
+def test_logout(home_page, existing_user):
+    login_page = home_page.go_to_login_or_signup()
+    home_page = login_page.login(existing_user)
+    login_page= home_page.logout()
+    login_page.check_that_logged_out()

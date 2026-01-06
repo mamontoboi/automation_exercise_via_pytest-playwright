@@ -1,6 +1,7 @@
 from playwright.sync_api import Page, expect
 import logging
 from pages.login_or_signup_page import LoginOrSignupPage
+from pages.contact_us_page import ContactUsPage
 
 logger = logging.getLogger(__name__)
 
@@ -9,6 +10,8 @@ class HomePage:
     UAT_URL = "https://automationexercise.com/"
     COOKIE_BUTTON = {"role": "button", "name": "Consent"}
     SIGNUP_LINK = {"role": "link", "name": " Signup / Login"}
+    LOGOUT_LINK = {"role": "link", "name": " Logout"}
+    CONTACT_US = {"role": "link", "name": " Contact us"}
     DELETE_ACCOUNT_LINK = {"role": "link", "name": " Delete Account"}
 
     def __init__(self, page: Page):
@@ -41,3 +44,14 @@ class HomePage:
     def assert_account_is_deleted(self):
         logger.info("Checking that account is deleted")
         expect(self.page.get_by_text("Account Deleted!")).to_be_visible()
+
+    def logout(self):
+        logger.info("Logging out")
+        self.page.get_by_role(**self.LOGOUT_LINK).click()
+        return LoginOrSignupPage(self.page)
+    
+    def go_to_contact_us_page(self):
+        logger.info("Navigating to Contact Us")
+        self.page.get_by_role(**self.CONTACT_US).click()
+        return ContactUsPage(self.page)
+

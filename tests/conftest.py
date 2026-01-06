@@ -1,18 +1,19 @@
-import os
 import logging
 import pytest
+from pathlib import Path
 from pytest import Item, FixtureRequest
 from playwright.sync_api import Page
+
 # fixtures are discovered by pytest
 from fixtures.users import new_user, existing_user  # noqa: F401
 from pages.home_page import HomePage
 
-REPORTS_DIR = "reports"
-TRACES_DIR = os.path.join(REPORTS_DIR, "traces")
-SCREENSHOTS_DIR = os.path.join(REPORTS_DIR, "screenshots")
+REPORTS_DIR = Path("reports")
+TRACES_DIR = REPORTS_DIR / "traces"
+SCREENSHOTS_DIR = REPORTS_DIR / "screenshots"
 
-os.makedirs(TRACES_DIR, exist_ok=True)
-os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
+TRACES_DIR.mkdir(parents=True, exist_ok=True)
+SCREENSHOTS_DIR.mkdir(parents=True, exist_ok=True)
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item: Item, call):
@@ -31,9 +32,10 @@ def screenshot_on_failure(page, request: FixtureRequest):
     # Runs after the test. request.node is the same as item in the hook
     if request.node.rep_call.failed:
         test_name = request.node.name
-        logging.info(f"Saving the screenshot to {SCREENSHOTS_DIR}/{test_name}.png")
+        screenshot_path = SCREENSHOTS_DIR / f"{test_name}.png"
+        logging.info(f"Saving the screenshot to {screenshot_path}")
         page.screenshot(
-            path=f"{SCREENSHOTS_DIR}/{test_name}.png",
+            path=screenshot_path,
             full_page=True,
         )
 

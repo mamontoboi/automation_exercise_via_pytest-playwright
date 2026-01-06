@@ -99,4 +99,9 @@ class LoginOrSignupPage:
         return HomePage(self.page)
     
     def assert_authentication_error(self, text):
+        logger.info(f"Checking that the text '{text}' is visible")
         expect(self.page.locator("#form")).to_contain_text(text)
+
+    def check_that_logged_out(self):
+        logger.info("Checking that user is logged out")
+        expect(self.page.get_by_role(**self.LOGIN_BUTTON)).to_be_visible()
