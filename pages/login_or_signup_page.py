@@ -3,13 +3,15 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class SignupPage:
+class LoginOrSignupPage:
 
     NAME_INPUT = {"role": "textbox", "name": "Name"}
     EMAIL_INPUT = {"text": "Email Address"}
+    PASSWORD_INPUT = {"role": "textbox", "name": "Password"}
+    LOGIN_BUTTON = {"role": "button", "name": "Login"}
     SIGNUP_BUTTON = {"role": "button", "name": "Signup"}
     TITLE_MR_RADIO = {"role": "radio", "name": "Mr."}
-    PASSWORD_INPUT = {"role": "textbox", "name": "Password *"}
+    SIGNUP_PASSWORD_INPUT = {"role": "textbox", "name": "Password *"}
     NEWSLETTER_CHECKBOX = {"role": "checkbox", "name": "Sign up for our newsletter!"}
     SPECIAL_OFFERS_CHECKBOX = {"role": "checkbox", "name": "Receive special offers from"}
     FIRST_NAME_INPUT = {"role": "textbox", "name": "First name *"}
@@ -22,11 +24,21 @@ class SignupPage:
     MOBILE_INPUT = {"role": "textbox", "name": "Mobile Number *"}
     CREATE_ACCOUNT_BUTTON = {"role": "button", "name": "Create Account"}
     CONTINUE_LINK = {"role": "link", "name": "Continue"}
-    DELETE_ACCOUNT_LINK = {"role": "link", "name": " Delete Account"}
+
 
     def __init__(self, page: Page):
         self.page = page
 
+    def login(self, user: dict):
+        logger.info("Starting login")
+        login_form = self.page.locator("form").filter(has_text="Login")
+        login_form.get_by_placeholder(**self.EMAIL_INPUT).fill(user["email"])
+        login_form.get_by_role(**self.PASSWORD_INPUT).fill(user["password"])
+        self.page.get_by_role(**self.LOGIN_BUTTON).click()
+
+        from pages.home_page import HomePage
+        return HomePage(self.page)
+        
     def start_signup(self, user: dict):
         logger.info("Starting signup")
         self.page.get_by_role(**self.NAME_INPUT).fill(user["name"])
@@ -37,7 +49,7 @@ class SignupPage:
     def fill_account_details(self, user: dict):
         logger.info("Filling account details")
         self.page.get_by_role(**self.TITLE_MR_RADIO).check()
-        self.page.get_by_role(**self.PASSWORD_INPUT).fill(user["password"])
+        self.page.get_by_role(**self.SIGNUP_PASSWORD_INPUT).fill(user["password"])
         self.page.get_by_role(**self.NEWSLETTER_CHECKBOX).check()
         self.page.get_by_role(**self.SPECIAL_OFFERS_CHECKBOX).check()
         self.page.locator("#days").select_option(user["date_of_birth"][0])
@@ -60,13 +72,5 @@ class SignupPage:
     def continue_after_creation(self):
         self.page.get_by_role(**self.CONTINUE_LINK).click()
 
-    def assert_logged_in(self, name: str):
-        expect(self.page.get_by_text(f"Logged in as {name}")).to_be_visible()
-
-    def delete_account(self):
-        logger.info("Deleting account")
-        self.page.get_by_role(**self.DELETE_ACCOUNT_LINK).click()
-
-    def assert_account_is_deleted(self):
-        logger.info("Checking that account is deleted")
-        expect(self.page.get_by_text("Account Deleted!")).to_be_visible()
+        from pages.home_page import HomePage
+        return HomePage(self.page)

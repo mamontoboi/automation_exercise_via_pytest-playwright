@@ -3,7 +3,7 @@ import pytest
 from pytest import Item, FixtureRequest
 import logging
 
-from fixtures.users import new_user
+from fixtures.users import new_user, existing_user  # noqa: F401  # fixtures are discovered by pytest
 
 REPORTS_DIR = "reports"
 TRACES_DIR = os.path.join(REPORTS_DIR, "traces")
@@ -34,5 +34,3 @@ def screenshot_on_failure(page, request: FixtureRequest):
             path=f"{SCREENSHOTS_DIR}/{test_name}.png",
             full_page=True,
         )
-
-

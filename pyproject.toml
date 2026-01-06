@@ -7,11 +7,15 @@ requires-python = ">=3.14"
 dependencies = [
     "pytest-html>=4.1.1",
     "pytest-playwright>=0.7.2",
+    "pytest-xdist>=3.8.0",
     "ruff>=0.14.10",
 ]
 
 [tool.pytest.ini_options]
+pythonpath = ["."]
 addopts = [
+    "-n",
+    "auto",
     "--tracing",
     "retain-on-failure",
     "--screenshot",
@@ -20,17 +24,11 @@ addopts = [
     "-v",
     "--strict-markers",
     "--html=reports/html/report.html",
-    "--self-contained-html"
-    ]
-testpaths = [
-    "tests"
+    "--self-contained-html",
 ]
+testpaths = ["tests"]
 
-markers = [
-    "smoke: critical smoke tests",
-    "ui: UI tests",
-    "api: API tests"
-]
+markers = ["smoke: critical smoke tests", "ui: UI tests", "api: API tests"]
 
 log_cli = true
 log_cli_level = "INFO"

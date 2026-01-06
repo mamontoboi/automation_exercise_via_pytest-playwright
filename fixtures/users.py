@@ -17,3 +17,11 @@ def new_user():
         "zip": "1010",
         "mobile": "123456789",
     }
+
+@pytest.fixture
+def existing_user():
+    return {
+        "name": "John Doe",
+        "email": "john_12345@test.com",
+        "password": "123456JohnDoe"
+    }
