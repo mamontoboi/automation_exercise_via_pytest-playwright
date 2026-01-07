@@ -16,10 +16,6 @@ pythonpath = ["."]
 addopts = [
     "-n",
     "auto",
-    "--tracing",
-    "retain-on-failure",
-    "--screenshot",
-    "only-on-failure",
     "-s",
     "-v",
     "--strict-markers",
