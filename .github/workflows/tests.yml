@@ -1,0 +1,29 @@
+name: UI & API Tests
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t ae-tests .
+
+      - name: Run tests
+        run: docker run --rm ae-tests
+
+      - name: Upload test artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts
+          path: |
+            reports/
+            test-results/
