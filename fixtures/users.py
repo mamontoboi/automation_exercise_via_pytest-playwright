@@ -1,5 +1,6 @@
 import pytest
 import uuid
+from test_data.users import EXISTING_USER
 
 @pytest.fixture
 def new_user():
@@ -20,8 +21,4 @@ def new_user():
 
 @pytest.fixture
 def existing_user():
-    return {
-        "name": "John Doe",
-        "email": "john_12345@test.com",
-        "password": "123456JohnDoe"
-    }
+    return EXISTING_USER.copy()
