@@ -18,34 +18,41 @@ jobs:
 
       # ---------------- API tests ----------------
       - name: Run API tests
+        id: api_tests
+        continue-on-error: true
         run: |
           docker run --rm \
             -v ${{ github.workspace }}/reports:/app/reports \
             ae-tests uv run pytest -m api
-        continue-on-error: true
 
       # ---------------- UI tests ----------------
       - name: Run UI tests
+        id: smoke_and_ui_tests
+        continue-on-error: true
         run: |
           docker run --rm \
             -v ${{ github.workspace }}/reports:/app/reports \
             -v ${{ github.workspace }}/test-results:/app/test-results \
-            ae-tests uv run pytest -m ui \
+            ae-tests uv run pytest -m "smoke and ui" \
               --tracing retain-on-failure \
               --screenshot only-on-failure
-        continue-on-error: true
 
       # ---------------- Reports ----------------
       - name: Upload reports (API + UI)
-        if: failure()
+        if: steps.api_tests.outcome == 'failure' || steps.smoke_and_ui_tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: reports
           path: reports/
 
       - name: Upload UI artifacts (traces, screenshots)
-        if: failure()
+        if: steps.smoke_and_ui_tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: ui-artifacts
           path: test-results/
+
+      # ------- Fail the job explicitly ---------
+      - name: Fail pipeline if tests failed
+        if: steps.api_tests.outcome == 'failure' || steps.smoke_and_ui_tests.outcome == 'failure'
+        run: exit 1
