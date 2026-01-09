@@ -33,7 +33,7 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}/reports:/app/reports \
             -v ${{ github.workspace }}/test-results:/app/test-results \
-            ae-tests uv run pytest -m "smoke and ui" \
+            ae-tests uv run pytest -m "smoke or ui" \
               --tracing retain-on-failure \
               --screenshot only-on-failure
 
