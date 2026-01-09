@@ -16,14 +16,36 @@ jobs:
       - name: Build Docker image
         run: docker build -t ae-tests .
 
-      - name: Run tests
-        run: docker run --rm ae-tests
+      # ---------------- API tests ----------------
+      - name: Run API tests
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}/reports:/app/reports \
+            ae-tests pytest -m api
+        continue-on-error: true
 
-      - name: Upload test artifacts
+      # ---------------- UI tests ----------------
+      - name: Run UI tests
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}/reports:/app/reports \
+            -v ${{ github.workspace }}/test-results:/app/test-results \
+            ae-tests pytest -m ui \
+              --tracing retain-on-failure \
+              --screenshot only-on-failure
+        continue-on-error: true
+
+      # ---------------- Reports ----------------
+      - name: Upload reports (API + UI)
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: test-artifacts
-          path: |
-            reports/
-            test-results/
+          name: reports
+          path: reports/
+
+      - name: Upload UI artifacts (traces, screenshots)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-artifacts
+          path: test-results/
