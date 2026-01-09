@@ -16,6 +16,11 @@ jobs:
       - name: Build Docker image
         run: docker build -t ae-tests .
 
+      - name: Prepare artifact directories
+        run: |
+          mkdir -p reports
+          mkdir -p test-results
+
       # ---------------- API tests ----------------
       - name: Run API tests
         id: api_tests
@@ -23,30 +28,34 @@ jobs:
         run: |
           docker run --rm \
             -v ${{ github.workspace }}/reports:/app/reports \
-            ae-tests uv run pytest -m api
+            ae-tests uv run pytest -m api \
+              --html=reports/html/report-api.html \
+              --self-contained-html
 
       # ---------------- UI tests ----------------
       - name: Run UI tests
-        id: smoke_and_ui_tests
+        id: smoke_or_ui_tests
         continue-on-error: true
         run: |
           docker run --rm \
             -v ${{ github.workspace }}/reports:/app/reports \
             -v ${{ github.workspace }}/test-results:/app/test-results \
             ae-tests uv run pytest -m "smoke or ui" \
+              --html=reports/html/report-ui.html \
+              --self-contained-html \
               --tracing retain-on-failure \
               --screenshot only-on-failure
 
       # ---------------- Reports ----------------
       - name: Upload reports (API + UI)
-        if: steps.api_tests.outcome == 'failure' || steps.smoke_and_ui_tests.outcome == 'failure'
+        if: steps.api_tests.outcome == 'failure' || steps.smoke_or_ui_tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: reports
           path: reports/
 
       - name: Upload UI artifacts (traces, screenshots)
-        if: steps.smoke_and_ui_tests.outcome == 'failure'
+        if: steps.smoke_or_ui_tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: ui-artifacts
@@ -54,5 +63,5 @@ jobs:
 
       # ------- Fail the job explicitly ---------
       - name: Fail pipeline if tests failed
-        if: steps.api_tests.outcome == 'failure' || steps.smoke_and_ui_tests.outcome == 'failure'
+        if: steps.api_tests.outcome == 'failure' || steps.smoke_or_ui_tests.outcome == 'failure'
         run: exit 1
