@@ -21,7 +21,7 @@ jobs:
         run: |
           docker run --rm \
             -v ${{ github.workspace }}/reports:/app/reports \
-            ae-tests pytest -m api
+            ae-tests uv run pytest -m api
         continue-on-error: true
 
       # ---------------- UI tests ----------------
@@ -30,7 +30,7 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}/reports:/app/reports \
             -v ${{ github.workspace }}/test-results:/app/test-results \
-            ae-tests pytest -m ui \
+            ae-tests uv run pytest -m ui \
               --tracing retain-on-failure \
               --screenshot only-on-failure
         continue-on-error: true

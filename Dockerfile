@@ -8,5 +8,3 @@ WORKDIR /app
 
 RUN uv sync --locked
 
-# Run tests
-CMD ["uv", "run", "pytest"]
