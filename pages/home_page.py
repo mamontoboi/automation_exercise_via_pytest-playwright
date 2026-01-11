@@ -2,6 +2,7 @@ from playwright.sync_api import Page, expect
 import logging
 from pages.login_or_signup_page import LoginOrSignupPage
 from pages.contact_us_page import ContactUsPage
+from pages.test_cases_page import TestCasesPage
 
 logger = logging.getLogger(__name__)
 
@@ -13,6 +14,7 @@ class HomePage:
     LOGOUT_LINK = {"role": "link", "name": " Logout"}
     CONTACT_US = {"role": "link", "name": " Contact us"}
     DELETE_ACCOUNT_LINK = {"role": "link", "name": " Delete Account"}
+    TEST_CASES_LINK = {"role": "link", "name": " Test Cases"}
 
     def __init__(self, page: Page):
         self.page = page
@@ -54,4 +56,8 @@ class HomePage:
         logger.info("Navigating to Contact Us")
         self.page.get_by_role(**self.CONTACT_US).click()
         return ContactUsPage(self.page)
-
+    
+    def go_to_test_cases_page(self):
+        logger.info("Navigating to Test Cases")
+        self.page.get_by_role(**self.TEST_CASES_LINK).click()
+        return TestCasesPage(self.page)
