@@ -58,7 +58,7 @@ jobs:
         if: steps.smoke_or_ui_tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
-          name: ui-artifacts
+          name: ui-traces
           path: test-results/
 
       # ------- Fail the job explicitly ---------

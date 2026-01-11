@@ -1,16 +1,9 @@
 import logging
-from playwright.sync_api import Page, expect
+from pages.base_page import BasePage
 
 logger = logging.getLogger(__name__)
 
-class TestCasesPage:
-    
-    def __init__(self, page: Page):
-        self.page = page
-
-    def check_that_header_is_test_cases(self):
-        logger.info("Checking that header contains Test Cases")
-        expect(self.page.locator("h2.title")).to_contain_text("Test Cases")
+class TestCasesPage(BasePage):
 
     def check_that_test_cases_are_present(self):
         logger.info("Checking the the list of test cases is not empty")
