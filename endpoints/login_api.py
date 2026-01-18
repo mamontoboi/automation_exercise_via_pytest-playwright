@@ -7,16 +7,25 @@ logger = logging.getLogger(__name__)
 
 class LoginAPI(BaseEndpoint):
 
-    def __post_payload_to_login_endpoint(self, payload):
-        self.response = requests.post(f"{self.BASE_URL}/verifyLogin", data=payload)
+    LOGIN_URL = f"{BaseEndpoint.BASE_URL}/verifyLogin"
+
+    def _post_payload_to_login_endpoint(self, payload: dict):
+        self.response = requests.post(self.LOGIN_URL, data=payload)
         self.response_json = self.response.json()
+        return self
 
     def post_valid_login_details(self):
         logger.info("Sending POST request with valid user credentials")
         payload = {"email": EXISTING_USER["email"], "password": EXISTING_USER["password"]}
-        self.__post_payload_to_login_endpoint(payload)
+        return self._post_payload_to_login_endpoint(payload)
 
     def post_invalid_login_details(self):
-        logger.info("Sending POST request with missing username")
+        logger.info("Sending POST request with missing email")
         payload = {"password": EXISTING_USER["password"]}
-        self.__post_payload_to_login_endpoint(payload)
+        return self._post_payload_to_login_endpoint(payload)
+
+    def delete_request(self):
+        logger.info("Sending DELETE request")
+        self.response = requests.delete(self.LOGIN_URL)
+        self.response_json = self.response.json()
+        return self

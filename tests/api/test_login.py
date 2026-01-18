@@ -3,17 +3,25 @@ from endpoints.login_api import LoginAPI
 
 
 @pytest.mark.api
-def test_to_verify_login_with_valid_details():
-    login_request = LoginAPI()
-    login_request.post_valid_login_details()
-    login_request.check_http_status(200)
-    login_request.check_status_code_from_response_json(200)
-    login_request.check_message_from_response_json("User exists!")
+def test_login_with_valid_user_details():
+    LoginAPI() \
+        .post_valid_login_details() \
+        .check_http_status(200) \
+        .check_status_code_from_response_json(200) \
+        .check_message_from_response_json("User exists!")
 
 @pytest.mark.api
-def test_to_verify_login_without_email_parameter():
-    login_request = LoginAPI()
-    login_request.post_invalid_login_details()
-    login_request.check_http_status(200)
-    login_request.check_status_code_from_response_json(400)
-    login_request.check_message_from_response_json("Bad request, email or password parameter is missing in POST request.")
+def test_login_with_missing_parameter():
+    LoginAPI() \
+        .post_invalid_login_details() \
+        .check_http_status(200) \
+        .check_status_code_from_response_json(400) \
+        .check_message_from_response_json("Bad request, email or password parameter is missing in POST request.")
+
+@pytest.mark.api
+def test_delete_login():
+    LoginAPI() \
+        .delete_request() \
+        .check_http_status(200) \
+        .check_status_code_from_response_json(405) \
+        .check_message_from_response_json("This request method is not supported.")

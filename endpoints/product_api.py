@@ -14,6 +14,7 @@ class ProductAPI(BaseEndpoint):
         assert "products" in self.response_json
         assert isinstance(self.products, list)
         assert len(self.products) > 0
+        return self
 
     def check_products_schema(self):
         logger.info("Checking the product schema")
@@ -28,4 +29,6 @@ class ProductAPI(BaseEndpoint):
             assert "category" in category
             assert "usertype" in category
             assert "usertype" in category["usertype"]
+        return self
+
 

@@ -10,10 +10,13 @@ class SearchProductsAPI(ProductAPI):
         logger.info(f"Sending POST request to search for product of type {text}")
         self.response = requests.post(f"{self.BASE_URL}/searchProduct", data={"search_product": text})
         self.response_json = self.response.json()
+        return self
 
     def post_to_search_products_without_search_parameter(self):
-        logger.info(f"Sending POST request to search for producs without search parameter")
+        logger.info("Sending POST request to search for producs without search parameter")
         self.response = requests.post(f"{self.BASE_URL}/searchProduct")
         self.response_json = self.response.json()
+        return self
+
 
 
