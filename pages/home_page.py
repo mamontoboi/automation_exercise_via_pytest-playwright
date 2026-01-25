@@ -19,6 +19,8 @@ class HomePage(BasePage):
     DELETE_ACCOUNT_LINK = {"role": "link", "name": " Delete Account"}
     TEST_CASES_LINK = {"role": "link", "name": " Test Cases"}
     PRODUCTS_LINK = {"role": "link", "name": " Products"}
+    ENTER_EMAIL_FOR_SUBSCRIPTION_FIELD = "#susbscribe_email"
+    SUBSCRIBE_BUTTON = "#subscribe"
 
     def open(self):
         logger.info("Opening home page")
@@ -67,3 +69,14 @@ class HomePage(BasePage):
         logger.info("Navigating to Products page")
         self.page.get_by_role(**self.PRODUCTS_LINK).click()
         return ProductsPage(self.page)
+
+    def subscribe(self):
+        logger.info("Filling up subscription email")
+        subscribe_field = self.page.locator(self.ENTER_EMAIL_FOR_SUBSCRIPTION_FIELD)
+        subscribe_field.scroll_into_view_if_needed()
+        subscribe_field.fill("john_doe@test.com")
+        self.page.locator(self.SUBSCRIBE_BUTTON).click()
+
+    def check_that_subscribed_successfully(self):
+        logger.info("Checking that subscription is successful")
+        expect(self.page.get_by_text("You have been successfully")).to_be_visible()
