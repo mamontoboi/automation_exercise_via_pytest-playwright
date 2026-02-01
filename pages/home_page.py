@@ -6,10 +6,12 @@ from pages.login_or_signup_page import LoginOrSignupPage
 from pages.contact_us_page import ContactUsPage
 from pages.test_cases_page import TestCasesPage
 from pages.products_page import ProductsPage
+from mixins.subscription_mixin import SubscriptionMixin
+from pages.cart_page import CartPage
 
 logger = logging.getLogger(__name__)
 
-class HomePage(BasePage):
+class HomePage(BasePage, SubscriptionMixin):
 
     UAT_URL = "https://automationexercise.com/"
     COOKIE_BUTTON = {"role": "button", "name": "Consent"}
@@ -19,8 +21,7 @@ class HomePage(BasePage):
     DELETE_ACCOUNT_LINK = {"role": "link", "name": " Delete Account"}
     TEST_CASES_LINK = {"role": "link", "name": " Test Cases"}
     PRODUCTS_LINK = {"role": "link", "name": " Products"}
-    ENTER_EMAIL_FOR_SUBSCRIPTION_FIELD = "#susbscribe_email"
-    SUBSCRIBE_BUTTON = "#subscribe"
+    CART_BUTTON = {"selector": "li a[href*='cart']"}
 
     def open(self):
         logger.info("Opening home page")
@@ -69,14 +70,8 @@ class HomePage(BasePage):
         logger.info("Navigating to Products page")
         self.page.get_by_role(**self.PRODUCTS_LINK).click()
         return ProductsPage(self.page)
-
-    def subscribe(self):
-        logger.info("Filling up subscription email")
-        subscribe_field = self.page.locator(self.ENTER_EMAIL_FOR_SUBSCRIPTION_FIELD)
-        subscribe_field.scroll_into_view_if_needed()
-        subscribe_field.fill("john_doe@test.com")
-        self.page.locator(self.SUBSCRIBE_BUTTON).click()
-
-    def check_that_subscribed_successfully(self):
-        logger.info("Checking that subscription is successful")
-        expect(self.page.get_by_text("You have been successfully")).to_be_visible()
+    
+    def go_to_cart(self):
+        logger.info("Open cart")
+        self.page.locator(**self.CART_BUTTON).click()
+        return CartPage(self.page)
