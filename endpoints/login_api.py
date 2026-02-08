@@ -19,7 +19,7 @@ class LoginAPI(BaseEndpoint):
         payload = {"email": EXISTING_USER["email"], "password": EXISTING_USER["password"]}
         return self._post_payload_to_login_endpoint(payload)
 
-    def post_invalid_login_details(self):
+    def post_login_details_with_missing_email(self):
         logger.info("Sending POST request with missing email")
         payload = {"password": EXISTING_USER["password"]}
         return self._post_payload_to_login_endpoint(payload)
@@ -29,3 +29,8 @@ class LoginAPI(BaseEndpoint):
         self.response = requests.delete(self.LOGIN_URL)
         self.response_json = self.response.json()
         return self
+
+    def post_invalid_login_details(self):
+        logger.info("Sending POST request with invalid user details")
+        payload = {"email": "not_exist@test.com", "password": "wrong_password"}
+        return self._post_payload_to_login_endpoint(payload)

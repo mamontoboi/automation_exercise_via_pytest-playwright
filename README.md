@@ -22,7 +22,7 @@ This repository contains a test automation project built with **Python**, **pyte
 - Login (positive and negative scenarios)
 - Contact Us form
 - Navigation and content validation
-- To be continued
+- Subscription
 
 ### API Tests (Requests)
 
@@ -30,7 +30,7 @@ This repository contains a test automation project built with **Python**, **pyte
 - Search products by text
 - Validate response schema and business rules
 - Verify negative cases (unsupported HTTP methods, missing params)
-- To be continued
+- Login (positive and negative scenarios)
 
 ---
 
