@@ -15,3 +15,8 @@ def pytest_runtest_makereport(item: Item, call):
     outcome = yield
     rep = outcome.get_result()
     setattr(item, "rep_" + rep.when, rep)
+
+@pytest.fixture(scope="session")
+def created_users():
+    """Fixture to store created users across tests."""
+    return []
