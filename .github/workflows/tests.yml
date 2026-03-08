@@ -49,6 +49,11 @@ jobs:
           name: ui-traces
           path: test-results/
 
+      - name: Fail pipeline if tests failed
+        if: failure()
+        run: exit 1
+
+
   API_tests:
     runs-on: ubuntu-latest
 
@@ -81,3 +86,7 @@ jobs:
         with:
           name: reports
           path: reports/
+
+      - name: Fail pipeline if tests failed
+        if: failure()
+        run: exit 1
