@@ -19,9 +19,8 @@ class CreateUser(BaseEndpoint):
     CREATE_USER_URL = f"{BaseEndpoint.BASE_URL}/createAccount"
     DELETE_USER_URL = f"{BaseEndpoint.BASE_URL}/deleteAccount"
 
-    # Store created users in fixture memory
-    def __init__(self, created_users):
-        self.created_users = created_users
+    def __init__(self):
+        self.created_users = []
 
     def generate_random_user(self):
         """Generate a random user and store it in memory."""
