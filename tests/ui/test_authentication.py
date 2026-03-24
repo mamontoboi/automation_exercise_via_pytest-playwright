@@ -30,6 +30,29 @@ def test_register_user_with_existing_email(home_page, existing_user):
     signup_page.assert_authentication_error("Email Address already exist!")
 
 @pytest.mark.smoke
+@pytest.mark.parametrize(
+    "incorrect_email, expected_error", [
+        ("dummy-mail.com","Please include an '@' in the email address. 'dummy-mail.com' is missing an '@'."),
+        ("Є@mail.com","A part followed by '@' should not contain the symbol 'Є'."),
+        ("dummy@mail.","'.' is used at a wrong position in 'mail.'."),
+        ("","Please fill out this field"),
+        ("\U0001f600@gmail.com", "A part followed by '@' should not contain the symbol '\U0001f600'.")
+    ],
+    ids=[
+        "missing @ symbol in email address",
+        "cyrillic letter in email address",
+        "no domain in email address",
+        "empty email address",
+        "emoji in email address"
+    ]
+)
+def test_register_user_with_incorrect_email(home_page, incorrect_email, expected_error):
+    login_page = home_page.go_to_login_or_signup()
+    login_page.fill_new_user_name("John Doe")
+    login_page.enter_invalid_email(incorrect_email)
+    login_page.assert_email_validation_message(expected_error)
+
+@pytest.mark.smoke
 def test_logout(home_page, existing_user):
     login_page = home_page.go_to_login_or_signup()
     home_page = login_page.login(existing_user)

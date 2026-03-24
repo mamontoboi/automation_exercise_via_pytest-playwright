@@ -61,10 +61,18 @@ class LoginOrSignupPage:
         login_form.get_by_placeholder(**self.EMAIL_INPUT).fill(user["email"])
         login_form.get_by_role(**self.PASSWORD_INPUT).fill(user["password"])
         self.page.get_by_role(**self.LOGIN_BUTTON).click()
+
+    def fill_new_user_name(self, name: str):
+        logger.info(f"Entering Username {name}")
+        self.page.get_by_role(**self.NAME_INPUT).fill(name)
+
+    def click_signup_button(self):
+        logger.info("Clicking signup button")
+        self.page.get_by_role(**self.SIGNUP_BUTTON).click()
         
     def start_signup(self, user: dict):
         logger.info("Starting signup")
-        self.page.get_by_role(**self.NAME_INPUT).fill(user["name"])
+        self.fill_new_user_name(user["name"])
         self.page.locator("form").filter(has_text="Signup") \
             .get_by_placeholder(**self.EMAIL_INPUT).fill(user["email"])
         self.page.get_by_role(**self.SIGNUP_BUTTON).click()
@@ -87,9 +95,14 @@ class LoginOrSignupPage:
         self.page.locator(**self.ZIPCODE_INPUT).fill(user["zip"])
         self.page.get_by_role(**self.MOBILE_INPUT).fill(user["mobile"])
 
+    def enter_invalid_email(self, invalid_email: str):
+        logger.info(f"Entering invalid email: {invalid_email}")
+        self.page.locator("form").filter(has_text="Signup") \
+            .get_by_placeholder("Email Address").fill(invalid_email)
+
     def create_account(self):
         logger.info("Creating account")
-        self.page.get_by_role(**self.CREATE_ACCOUNT_BUTTON).click()
+        self.click_signup_button()
         expect(self.page.get_by_text("Account Created!")).to_be_visible()
 
     def continue_after_creation(self):
@@ -105,3 +118,33 @@ class LoginOrSignupPage:
     def check_that_logged_out(self):
         logger.info("Checking that user is logged out")
         expect(self.page.get_by_role(**self.LOGIN_BUTTON)).to_be_visible()
+
+    def assert_validation_popup(self, expected_message: str, trigger_action=None):
+        """
+        Asserts that a browser-native validation popup appears with the expected message.
+        If trigger_action is provided, it will be called to trigger the popup (e.g., clicking Signup).
+        Otherwise, the method will click the Signup button by default.
+        """
+        dialog_message = None
+        def handle_dialog(dialog):
+            nonlocal dialog_message
+            dialog_message = dialog.message
+            dialog.dismiss()
+        self.page.once("dialog", handle_dialog)
+        if trigger_action:
+            trigger_action()
+        else:
+            self.click_signup_button()
+        assert dialog_message is not None, "No validation popup appeared."
+        assert expected_message in dialog_message, f"Expected '{expected_message}' in popup, got '{dialog_message}'"
+
+    def assert_email_validation_message(self, expected_message: str):
+        """
+        Asserts the browser-native validationMessage of the email input field.
+        """
+        logger.info(f"Checking that validation message contains {expected_message}")
+        # Find the email input in the Signup form
+        email_input = self.page.locator("form").filter(has_text="Signup").get_by_placeholder("Email Address")
+        # Get the validation message
+        actual_message = email_input.evaluate("el => el.validationMessage")
+        assert expected_message in actual_message, f"Expected validation message to contain '{expected_message}', got '{actual_message}'"
