@@ -102,7 +102,7 @@ class LoginOrSignupPage:
 
     def create_account(self):
         logger.info("Creating account")
-        self.click_signup_button()
+        self.page.get_by_role(**self.CREATE_ACCOUNT_BUTTON).click()
         expect(self.page.get_by_text("Account Created!")).to_be_visible()
 
     def continue_after_creation(self):
