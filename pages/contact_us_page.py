@@ -1,10 +1,11 @@
 import logging
 from playwright.sync_api import Page, Dialog, expect
+from pages.base_page import BasePage
 
 logger = logging.getLogger(__name__)
 
 
-class ContactUsPage:
+class ContactUsPage(BasePage):
 
     NAME_INPUT = {"role": "textbox", "name": "Name"}
     EMAIL_INPUT = {"role": "textbox", "name": "Email"}

@@ -45,3 +45,10 @@ def test_delete_product_from_cart(home_page):
     cart_page.delete_product()
     cart_page.check_card_is_empty()
     
+@pytest.mark.ui
+def test_add_review_on_product(home_page):
+    all_products_page = home_page.go_to_products_page()
+    product_page = all_products_page.open_first_product_details()
+    product_page.check_visibility_of_review_header()
+    product_page.add_review()
+    product_page.assert_success_message("Thank you for your review.")

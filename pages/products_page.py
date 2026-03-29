@@ -15,6 +15,7 @@ class ProductsPage(BasePage):
     ADD_TO_CART_BUTTON = ".overlay-content a.add-to-cart"
     CONTINUE_SHOPPING = "Continue Shopping"
     VIEW_CART_LINK = {"role": "link", "name": "View Cart"}
+    VIEW_PRODUCT_BUTTON = {"role": "link", "name": "View Product"}
     
 
     def go_to_first_product_details(self):
@@ -55,3 +56,7 @@ class ProductsPage(BasePage):
     def open_cart(self):
         self.page.get_by_role(**self.VIEW_CART_LINK).click()
         return CartPage(self.page)
+
+    def open_first_product_details(self):
+        self.page.get_by_role(**self.VIEW_PRODUCT_BUTTON).first.click()
+        return ProductPage(self.page)
