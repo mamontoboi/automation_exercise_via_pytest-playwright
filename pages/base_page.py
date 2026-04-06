@@ -11,3 +11,6 @@ class BasePage:
     def check_header_text(self, expected_text):
         logger.info(f"Checking that header contains {expected_text}")
         expect(self.page.locator("h2.title")).to_contain_text(expected_text)
+
+    def scroll_to_bottom(self):
+        self.page.evaluate("window.scrollTo(0, document.body.scrollHeight)")

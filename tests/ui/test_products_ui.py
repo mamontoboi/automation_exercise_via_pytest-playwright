@@ -52,3 +52,12 @@ def test_add_review_on_product(home_page):
     product_page.check_visibility_of_review_header()
     product_page.add_review()
     product_page.assert_success_message("Thank you for your review.")
+
+@pytest.mark.ui
+def test_add_recommended_item_to_cart(home_page):
+    home_page.scroll_to_bottom()
+    home_page.is_recommended_section_visible()
+    home_page.add_first_recommended_to_cart()
+    cart_page = home_page.click_view_cart_in_modal_window()
+    cart_page.check_number_of_items_in_cart(1)
+    cart_page.check_product_quantity(1)

@@ -95,7 +95,13 @@ pytest -m ui
 pytest -m api
 ```
 
-### 5. Run tests in parallel
+### 5. Run Smoke tests only
+
+```bash
+pytest -m smoke
+```
+
+### 6. Run tests in parallel
 
 ```bash
 pytest -n auto

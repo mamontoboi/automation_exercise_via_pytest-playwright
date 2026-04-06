@@ -22,6 +22,9 @@ class HomePage(BasePage, SubscriptionMixin):
     TEST_CASES_LINK = {"role": "link", "name": " Test Cases"}
     PRODUCTS_LINK = {"role": "link", "name": " Products"}
     CART_BUTTON = {"selector": "li a[href*='cart']"}
+    ADD_RECOMMENDED_PRODUCT_TO_CART_BTN = 'xpath=//div[@id="recommended-item-carousel"]//a[contains(@class,"add-to-cart")]'
+    RECOMMENDED_SECTION_XPATH = 'xpath=//h2[text()="recommended items" or text()="RECOMMENDED ITEMS"]'
+    VIEW_CART_BTN_XPATH = 'xpath=//a[contains(., "View Cart")]'
 
     def open(self):
         logger.info("Opening home page")
@@ -74,4 +77,17 @@ class HomePage(BasePage, SubscriptionMixin):
     def go_to_cart(self):
         logger.info("Open cart")
         self.page.locator(**self.CART_BUTTON).click()
+        return CartPage(self.page)
+    
+    def is_recommended_section_visible(self):
+        logger.info("Checking if 'RECOMMENDED ITEMS' section is visible")
+        expect(self.page.locator(self.RECOMMENDED_SECTION_XPATH)).to_be_visible()
+
+    def add_first_recommended_to_cart(self):
+        logger.info("Adding first recommended item to cart")
+        self.page.locator(self.ADD_RECOMMENDED_PRODUCT_TO_CART_BTN).first.click()
+
+    def click_view_cart_in_modal_window(self):
+        logger.info("Clicking 'View Cart' button")
+        self.page.locator(self.VIEW_CART_BTN_XPATH).click()
         return CartPage(self.page)
