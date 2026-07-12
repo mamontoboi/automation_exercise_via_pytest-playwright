@@ -18,3 +18,5 @@ wheels/
 # Report folders
 reports/
 test-results/
+allure-report
+allure-results

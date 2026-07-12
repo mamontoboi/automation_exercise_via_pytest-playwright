@@ -1,3 +1,4 @@
+import allure
 import logging
 from playwright.sync_api import Page, expect
 from pages.cart_page import CartPage
@@ -21,6 +22,7 @@ class ProductPage:
     def __init__(self, page: Page):
         self.page = page
 
+    @allure.step("Verify the product details section is visible")
     def check_visibility_of_product_details(self):
         logging.info("Check product detail fields")
         expected_fields= "Category", "Availability", "Condition", "Brand"
@@ -32,26 +34,32 @@ class ProductPage:
             logging.info(f"Checking visibility of {field} field")
             expect(product_information_container.filter(has_text=field)).to_be_visible()
 
+    @allure.step("Verify the review section header is visible")
     def check_visibility_of_review_header(self):
         check.is_true(self.page.get_by_role(**self.REVIEW_CONTAINER_HEADER).is_visible())
 
+    @allure.step("Increase the product quantity using the quantity control")
     def increase_quantity_by_arrow(self):
         """Click the arrow up button (simulate stepUp)"""
         self.page.evaluate(f'const input = document.querySelector("{self.QUANTITY_INPUT}"); input.stepUp();')
 
+    @allure.step("Add the current product to the cart")
     def add_to_cart(self):
         self.page.locator(self.ADD_TO_CART_BUTTON).click()
 
+    @allure.step("Open the cart from the product page")
     def view_cart(self):
         self.page.locator(self.VIEW_CART_LINK).click()
         return CartPage(self.page)
 
+    @allure.step("Submit a product review")
     def add_review(self):
-        self.page.get_by_role(**self.USER_NAME_FIELD).fill(EXISTING_USER["name"])
-        self.page.get_by_role(**self.EMAIL_FIELD).fill(EXISTING_USER["email"])
+        self.page.get_by_role(**self.USER_NAME_FIELD).fill(EXISTING_USER.name)
+        self.page.get_by_role(**self.EMAIL_FIELD).fill(EXISTING_USER.email)
         self.page.get_by_role(**self.REVIEW_INPUT_FIELD).fill("Test review here")
         self.page.get_by_role(**self.SUBMIT_BUTTON).click()
 
+    @allure.step("Verify the success message for the last action")
     def assert_success_message(self, text):
         logger.info(f"Checking that the text '{text}' is visible")
         expect(self.page.locator("#review-form")).to_contain_text(text)

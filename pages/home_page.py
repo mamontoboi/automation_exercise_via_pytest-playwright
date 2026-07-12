@@ -1,3 +1,4 @@
+import allure
 import logging
 from playwright.sync_api import expect
 
@@ -26,67 +27,81 @@ class HomePage(BasePage, SubscriptionMixin):
     RECOMMENDED_SECTION_XPATH = 'xpath=//h2[text()="recommended items" or text()="RECOMMENDED ITEMS"]'
     VIEW_CART_BTN_XPATH = 'xpath=//a[contains(., "View Cart")]'
 
+    @allure.step("Open the home page")
     def open(self):
         logger.info("Opening home page")
         self.page.goto(self.UAT_URL)
         return self
 
+    @allure.step("Accept cookies if the consent banner is shown")
     def accept_cookies_if_present(self):
         btn = self.page.get_by_role(**self.COOKIE_BUTTON)
         if btn.is_visible():
             logger.info("Accepting cookies")
             btn.click()
 
+    @allure.step("Navigate to the login or signup page")
     def go_to_login_or_signup(self):
         logger.info("Navigating to Signup/Login")
         self.page.get_by_role(**self.SIGNUP_LINK).click()
         return LoginOrSignupPage(self.page)
 
+    @allure.step("Verify the user is logged in")
     def assert_logged_in(self, name: str):
         logger.info(f"Checking that the user {name} is logged in")
         expect(self.page.get_by_text(f"Logged in as {name}")).to_be_visible()
 
+    @allure.step("Delete the current user account")
     def delete_account(self):
         logger.info("Deleting account")
         self.page.get_by_role(**self.DELETE_ACCOUNT_LINK).click()
 
+    @allure.step("Verify the account deletion confirmation")
     def assert_account_is_deleted(self):
         logger.info("Checking that account is deleted")
         expect(self.page.get_by_text("Account Deleted!")).to_be_visible()
 
+    @allure.step("Log out of the current account")
     def logout(self):
         logger.info("Logging out")
         self.page.get_by_role(**self.LOGOUT_LINK).click()
         return LoginOrSignupPage(self.page)
-    
+
+    @allure.step("Navigate to the contact us page")
     def go_to_contact_us_page(self):
         logger.info("Navigating to Contact Us")
         self.page.get_by_role(**self.CONTACT_US).click()
         return ContactUsPage(self.page)
-    
+
+    @allure.step("Navigate to the test cases page")
     def go_to_test_cases_page(self):
         logger.info("Navigating to Test Cases")
         self.page.get_by_role(**self.TEST_CASES_LINK).click()
         return TestCasesPage(self.page)
-    
+
+    @allure.step("Navigate to the products page")
     def go_to_products_page(self):
         logger.info("Navigating to Products page")
         self.page.get_by_role(**self.PRODUCTS_LINK).click()
         return ProductsPage(self.page)
-    
+
+    @allure.step("Open the cart page")
     def go_to_cart(self):
         logger.info("Open cart")
         self.page.locator(**self.CART_BUTTON).click()
         return CartPage(self.page)
-    
+
+    @allure.step("Verify the recommended items section is visible")
     def is_recommended_section_visible(self):
         logger.info("Checking if 'RECOMMENDED ITEMS' section is visible")
         expect(self.page.locator(self.RECOMMENDED_SECTION_XPATH)).to_be_visible()
 
+    @allure.step("Add the first recommended product to the cart")
     def add_first_recommended_to_cart(self):
         logger.info("Adding first recommended item to cart")
         self.page.locator(self.ADD_RECOMMENDED_PRODUCT_TO_CART_BTN).first.click()
 
+    @allure.step("Open the cart from the recommendation modal")
     def click_view_cart_in_modal_window(self):
         logger.info("Clicking 'View Cart' button")
         self.page.locator(self.VIEW_CART_BTN_XPATH).click()

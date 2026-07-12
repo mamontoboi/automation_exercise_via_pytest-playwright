@@ -1,7 +1,9 @@
 import logging
+import allure
 from endpoints.base_endpoint import BaseEndpoint
 
 logger = logging.getLogger(__name__)
+
 
 class ProductAPI(BaseEndpoint):
 
@@ -9,6 +11,7 @@ class ProductAPI(BaseEndpoint):
     def products(self):
         return self.response_json.get("products", [])
 
+    @allure.step("Verify the products payload is populated")
     def check_list_of_products_is_not_empty(self):
         logger.info("Checking the list of products is not empty")
         assert "products" in self.response_json
@@ -16,6 +19,7 @@ class ProductAPI(BaseEndpoint):
         assert len(self.products) > 0
         return self
 
+    @allure.step("Validate the product schema in the response")
     def check_products_schema(self):
         logger.info("Checking the product schema")
         for product in self.products:

@@ -1,5 +1,14 @@
 import pytest
 
+from utils.allure_reporting import AllureParentSuite, AllureSuiteName, report_case
+
+
+@report_case(
+    parent_suite=AllureParentSuite.UI,
+    suite=AllureSuiteName.PRODUCTS,
+    sub_suite="Positive Tests",
+    title="Open product details",
+)
 @pytest.mark.ui
 def test_product_details(home_page):
     all_products_page = home_page.go_to_products_page()
@@ -7,6 +16,13 @@ def test_product_details(home_page):
     product_details_page = all_products_page.go_to_first_product_details()
     product_details_page.check_visibility_of_product_details()
 
+
+@report_case(
+    parent_suite=AllureParentSuite.UI,
+    suite=AllureSuiteName.PRODUCTS,
+    sub_suite="Positive Tests",
+    title="Search for a product",
+)
 @pytest.mark.ui
 def test_search_product(home_page):
     all_products_page = home_page.go_to_products_page()
@@ -15,6 +31,13 @@ def test_search_product(home_page):
     all_products_page.check_header_text("Searched Products")
     all_products_page.check_that_searched_product_is_visible("Blue Top")
 
+
+@report_case(
+    parent_suite=AllureParentSuite.UI,
+    suite=AllureSuiteName.PRODUCTS,
+    sub_suite="Positive Tests",
+    title="Add products to the cart",
+)
 @pytest.mark.ui
 def test_add_products_to_cart(home_page):
     all_products_page = home_page.go_to_products_page()
@@ -25,6 +48,13 @@ def test_add_products_to_cart(home_page):
     cart_page = all_products_page.open_cart()
     cart_page.check_number_of_items_in_cart(2)
 
+
+@report_case(
+    parent_suite=AllureParentSuite.UI,
+    suite=AllureSuiteName.PRODUCTS,
+    sub_suite="Positive Tests",
+    title="Increase product quantity from details page",
+)
 @pytest.mark.ui
 def test_add_4_products_to_cart(home_page):
     all_products_page = home_page.go_to_products_page()
@@ -37,6 +67,13 @@ def test_add_4_products_to_cart(home_page):
     cart_page.check_number_of_items_in_cart(1)
     cart_page.check_product_quantity(4)
 
+
+@report_case(
+    parent_suite=AllureParentSuite.UI,
+    suite=AllureSuiteName.PRODUCTS,
+    sub_suite="Positive Tests",
+    title="Delete a product from the cart",
+)
 @pytest.mark.ui
 def test_delete_product_from_cart(home_page):
     all_products_page = home_page.go_to_products_page()
@@ -44,7 +81,14 @@ def test_delete_product_from_cart(home_page):
     cart_page = all_products_page.open_cart()
     cart_page.delete_product()
     cart_page.check_card_is_empty()
-    
+
+
+@report_case(
+    parent_suite=AllureParentSuite.UI,
+    suite=AllureSuiteName.PRODUCTS,
+    sub_suite="Positive Tests",
+    title="Add a review to a product",
+)
 @pytest.mark.ui
 def test_add_review_on_product(home_page):
     all_products_page = home_page.go_to_products_page()
@@ -53,6 +97,13 @@ def test_add_review_on_product(home_page):
     product_page.add_review()
     product_page.assert_success_message("Thank you for your review.")
 
+
+@report_case(
+    parent_suite=AllureParentSuite.UI,
+    suite=AllureSuiteName.PRODUCTS,
+    sub_suite="Positive Tests",
+    title="Add a recommended item to the cart",
+)
 @pytest.mark.ui
 def test_add_recommended_item_to_cart(home_page):
     home_page.scroll_to_bottom()

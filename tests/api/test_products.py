@@ -1,8 +1,16 @@
 import pytest
+import allure
 from endpoints.all_products_api import AllProductsAPI
 from endpoints.search_product_api import SearchProductsAPI
+from utils.allure_reporting import AllureParentSuite, AllureSuiteName, report_case
 
 
+@report_case(
+    parent_suite=AllureParentSuite.API,
+    suite=AllureSuiteName.PRODUCTS,
+    sub_suite="Positive Tests",
+    title="Get all available products",
+)
 @pytest.mark.api
 def test_get_all_products_list():
     AllProductsAPI() \
@@ -11,6 +19,12 @@ def test_get_all_products_list():
         .check_list_of_products_is_not_empty() \
         .check_products_schema()
 
+@report_case(
+    parent_suite=AllureParentSuite.API,
+    suite=AllureSuiteName.PRODUCTS,
+    sub_suite="Negative Tests",
+    title="Post to get all available products",
+)
 @pytest.mark.api
 def test_post_to_all_products_list():
     AllProductsAPI() \
@@ -19,6 +33,12 @@ def test_post_to_all_products_list():
         .check_status_code_from_response_json(405) \
         .check_message_from_response_json("This request method is not supported.")
 
+@report_case(
+    parent_suite=AllureParentSuite.API,
+    suite=AllureSuiteName.PRODUCTS,
+    sub_suite="Positive Tests",
+    title="Post to search product",
+)
 @pytest.mark.api
 def test_post_to_search_product():
     SearchProductsAPI() \
@@ -27,6 +47,12 @@ def test_post_to_search_product():
         .check_list_of_products_is_not_empty() \
         .check_products_schema()
 
+@report_case(
+    parent_suite=AllureParentSuite.API,
+    suite=AllureSuiteName.PRODUCTS,
+    sub_suite="Negative Tests",
+    title="Post to search product without parameter",
+)
 @pytest.mark.api
 def test_post_to_search_product_without_search_parameter():
     SearchProductsAPI() \

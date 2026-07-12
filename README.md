@@ -42,6 +42,7 @@ This repository contains a test automation project built with **Python**, **pyte
 - **requests** – API testing
 - **pytest-xdist** – parallel execution
 - **pytest-html** – HTML reports
+- **Allure Report** – rich execution reports and history
 - **Ruff** – static analysis / linting
 - **uv** – dependency management
 - **Docker** – containerized execution
@@ -109,7 +110,31 @@ pytest -n auto
 
 ---
 
-## 📸 Diagnostics on Failures
+## � Allure Reporting
+
+This project can generate rich Allure reports for both UI and API suites.
+
+### Generate a local Allure report
+
+```bash
+pytest --alluredir=allure-results
+allure generate allure-results -o allure-report --clean
+allure open allure-report
+```
+
+### CI / GitHub Actions
+
+The workflow uploads:
+
+- raw Allure result files as artifacts
+- a generated HTML Allure report for each suite
+- a merged Allure report that combines UI and API execution results
+
+You can inspect the generated report from the workflow artifacts after a run.
+
+---
+
+## �📸 Diagnostics on Failures
 
 - **Screenshots** are captured automatically for failed UI tests
 - **Playwright traces** can be enabled to debug failures

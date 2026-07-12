@@ -1,11 +1,28 @@
+import allure
 import pytest
 
+from utils.allure_reporting import AllureParentSuite, AllureSuiteName, report_case
+
+
+@report_case(
+    parent_suite=AllureParentSuite.UI,
+    suite=AllureSuiteName.AUTHENTICATION,
+    sub_suite="Positive Tests",
+    title="Login with valid user credentials",
+)
 @pytest.mark.smoke
 def test_login_successful(home_page, existing_user):
     login_page = home_page.go_to_login_or_signup()
     home_page = login_page.login(existing_user)
-    home_page.assert_logged_in(existing_user["name"])
+    home_page.assert_logged_in(existing_user.name)
 
+
+@report_case(
+    parent_suite=AllureParentSuite.UI,
+    suite=AllureSuiteName.AUTHENTICATION,
+    sub_suite="Positive Tests",
+    title="Register a new user",
+)
 @pytest.mark.smoke
 def test_register_user(home_page, new_user):
     signup_page = home_page.go_to_login_or_signup()
@@ -13,22 +30,43 @@ def test_register_user(home_page, new_user):
     signup_page.fill_account_details(new_user)
     signup_page.create_account()
     home_page = signup_page.continue_after_creation()
-    home_page.assert_logged_in(new_user["name"])
+    home_page.assert_logged_in(new_user.name)
     home_page.delete_account()
     home_page.assert_account_is_deleted()
 
+
+@report_case(
+    parent_suite=AllureParentSuite.UI,
+    suite=AllureSuiteName.AUTHENTICATION,
+    sub_suite="Negative Tests",
+    title="Login with incorrect password",
+)
 @pytest.mark.smoke
 def test_login_with_incorrect_password(home_page, existing_user):
     login_page = home_page.go_to_login_or_signup()
     login_page.login_via_wrong_password(existing_user)
     login_page.assert_authentication_error("Your email or password is incorrect!")
 
+
+@report_case(
+    parent_suite=AllureParentSuite.UI,
+    suite=AllureSuiteName.AUTHENTICATION,
+    sub_suite="Negative Tests",
+    title="Register with an existing email",
+)
 @pytest.mark.smoke
 def test_register_user_with_existing_email(home_page, existing_user):
     signup_page = home_page.go_to_login_or_signup()
     signup_page.start_signup(existing_user)
     signup_page.assert_authentication_error("Email Address already exist!")
 
+
+@report_case(
+    parent_suite=AllureParentSuite.UI,
+    suite=AllureSuiteName.AUTHENTICATION,
+    sub_suite="Negative Tests",
+    title="Register with invalid email format",
+)
 @pytest.mark.smoke
 @pytest.mark.parametrize(
     "incorrect_email, expected_error", [
@@ -52,9 +90,16 @@ def test_register_user_with_incorrect_email(home_page, incorrect_email, expected
     login_page.enter_invalid_email(incorrect_email)
     login_page.assert_email_validation_message(expected_error)
 
+
+@report_case(
+    parent_suite=AllureParentSuite.UI,
+    suite=AllureSuiteName.AUTHENTICATION,
+    sub_suite="Positive Tests",
+    title="Logout from the account",
+)
 @pytest.mark.smoke
 def test_logout(home_page, existing_user):
     login_page = home_page.go_to_login_or_signup()
     home_page = login_page.login(existing_user)
-    login_page= home_page.logout()
+    login_page = home_page.logout()
     login_page.check_that_logged_out()
