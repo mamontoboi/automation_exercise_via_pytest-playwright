@@ -181,7 +181,7 @@ docker run --rm automation-tests
 
 ---
 
-## 🔄 CI / GitHub Actions (Ready)
+## 🔄 CI / GitHub Actions
 
 The project structure and configuration are suitable for CI pipelines:
 
@@ -189,8 +189,6 @@ The project structure and configuration are suitable for CI pipelines:
 - Parallel runs
 - Artifacts (reports, screenshots)
 - Deterministic dependency installs
-
-A GitHub Actions workflow can be easily added to run tests on each push.
 
 ---
 
