@@ -238,18 +238,15 @@ jobs:
           path: allure-report/
 
       - name: Setup GitHub Pages
-        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
-        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: allure-report/
 
       - name: Deploy to GitHub Pages
         id: deployment
-        if: github.event_name != 'pull_request'
         uses: actions/deploy-pages@v4
 
       - name: Add report link to summary
