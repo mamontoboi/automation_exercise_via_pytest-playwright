@@ -20,3 +20,6 @@ reports/
 test-results/
 allure-report
 allure-results
+
+# Local variables
+.env

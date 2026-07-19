@@ -1,4 +1,3 @@
-import allure
 import pytest
 from endpoints.login_api import LoginAPI
 from utils.allure_reporting import AllureParentSuite, AllureSuiteName, report_case

@@ -1,4 +1,3 @@
-import allure
 import pytest
 from endpoints.all_brands_api import AllBrandsAPI
 from utils.allure_reporting import AllureParentSuite, AllureSuiteName, report_case

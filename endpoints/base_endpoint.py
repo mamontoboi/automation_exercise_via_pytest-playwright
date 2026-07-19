@@ -35,7 +35,7 @@ class BaseEndpoint:
             attachment_type=allure.attachment_type.JSON,
         )
 
-    @allure.step(f"Verify the response HTTP status")
+    @allure.step("Verify the response HTTP status")
     def check_http_status(self, expected_code):
         logger.info(f"Checking that the http status code of the response is {expected_code}")
         try:
@@ -47,7 +47,7 @@ class BaseEndpoint:
             raise
         return self
 
-    @allure.step(f"Check the message of the response")
+    @allure.step("Check the message of the response")
     def check_message_from_response_json(self, expected_message):
         logger.info(f"Checking that the message in the response is: {expected_message}")
         try:
@@ -59,7 +59,7 @@ class BaseEndpoint:
             raise
         return self
 
-    @allure.step(f"Check the status code in the message of the response")
+    @allure.step("Check the status code in the message of the response")
     def check_status_code_from_response_json(self, expected_code):
         logger.info(f"Checking that the status code in the response is {expected_code}")
         try:
