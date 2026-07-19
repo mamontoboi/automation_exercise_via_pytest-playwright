@@ -60,6 +60,9 @@ jobs:
         continue-on-error: true
         run: |
           docker run --rm \
+            -e NAME \
+            -e EMAIL \
+            -e PASSWORD \
             -v ${{ github.workspace }}/reports:/app/reports \
             -v ${{ github.workspace }}/test-results:/app/test-results \
             -v ${{ github.workspace }}/allure-results:/app/allure-results \
@@ -142,6 +145,9 @@ jobs:
         continue-on-error: true
         run: |
           docker run --rm \
+            -e NAME \
+            -e EMAIL \
+            -e PASSWORD \
             -v ${{ github.workspace }}/reports:/app/reports \
             -v ${{ github.workspace }}/allure-results:/app/allure-results \
             ae-tests uv run pytest -m api -n auto \
@@ -238,15 +244,18 @@ jobs:
           path: allure-report/
 
       - name: Setup GitHub Pages
+        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: allure-report/
 
       - name: Deploy to GitHub Pages
         id: deployment
+        if: github.event_name != 'pull_request'
         uses: actions/deploy-pages@v4
 
       - name: Add report link to summary
