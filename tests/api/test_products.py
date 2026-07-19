@@ -1,5 +1,4 @@
 import pytest
-import allure
 from endpoints.all_products_api import AllProductsAPI
 from endpoints.search_product_api import SearchProductsAPI
 from utils.allure_reporting import AllureParentSuite, AllureSuiteName, report_case

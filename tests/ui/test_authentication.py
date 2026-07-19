@@ -1,4 +1,3 @@
-import allure
 import pytest
 
 from utils.allure_reporting import AllureParentSuite, AllureSuiteName, report_case

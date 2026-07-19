@@ -1,7 +1,11 @@
+import os
+from dotenv import load_dotenv
 from test_data.user import User
 
-EXISTING_USER = User(
-    name="John Doe", 
-    email="john_12345@test.com", 
-    password="123456JohnDoe"
-    )
+load_dotenv()
+
+name = os.getenv("NAME")
+email = os.getenv("EMAIL")
+password = os.getenv("PASSWORD")
+
+EXISTING_USER = User(name, email, password)
