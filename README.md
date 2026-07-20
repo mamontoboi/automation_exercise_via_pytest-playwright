@@ -1,5 +1,9 @@
 # Automation Exercise – Pytest + Playwright
 
+[![UI & API Tests](https://github.com/mamontoboi/automation_exercise_via_pytest-playwright/actions/workflows/tests.yml/badge.svg)](https://github.com/mamontoboi/automation_exercise_via_pytest-playwright/actions/workflows/tests.yml)
+
+[![Latest Allure Report](https://img.shields.io/badge/Allure-Latest%20Report-green)](https://mamontoboi.github.io/automation_exercise_via_pytest-playwright/)
+
 This repository contains a test automation project built with **Python**, **pytest**, and **Playwright**. It covers both **UI** and **API** testing for the public demo application [**automationexercise.com**](https://automationexercise.com/) and demonstrates modern automation practices used in real-world projects.
 
 ---
