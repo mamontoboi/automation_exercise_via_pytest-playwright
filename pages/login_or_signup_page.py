@@ -1,9 +1,13 @@
 import allure
 import logging
+from typing import TYPE_CHECKING
 from urllib.parse import urlencode, parse_qs
 from playwright.sync_api import Route, expect
 from pages.base_page import BasePage
 from test_data.user import User
+
+if TYPE_CHECKING:
+    from pages.home_page import HomePage
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +34,7 @@ class LoginOrSignupPage(BasePage):
     CONTINUE_LINK = {"role": "link", "name": "Continue"}
 
     @allure.step("Log in with the provided user credentials")
-    def login(self, user: User):
+    def login(self, user: User) -> "HomePage":
         logger.info("Starting login")
         login_form = self.page.locator("form").filter(has_text="Login")
         login_form.get_by_placeholder(**self.EMAIL_INPUT).fill(user.email)
@@ -114,7 +118,7 @@ class LoginOrSignupPage(BasePage):
         expect(self.page.get_by_text("Account Created!")).to_be_visible()
 
     @allure.step("Continue after account creation")
-    def continue_after_creation(self):
+    def continue_after_creation(self) -> "HomePage":
         self.page.get_by_role(**self.CONTINUE_LINK).click()
 
         from pages.home_page import HomePage
