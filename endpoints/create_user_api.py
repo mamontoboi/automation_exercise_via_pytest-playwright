@@ -39,7 +39,7 @@ class CreateUser(BaseEndpoint):
             password=faker.password(),
             title=random.choice([Title.Mr.value, Title.Ms.value, Title.Miss.value]),
             birth_date=faker.date_of_birth(minimum_age=18, maximum_age=80),
-            lastname=faker.last_name(),
+            last_name=faker.last_name(),
             company=faker.sentence(ext_word_list=["International", "Management", "Leading", "GmbH"]),
             address=faker.address(),
             zipcode=faker.zipcode(),

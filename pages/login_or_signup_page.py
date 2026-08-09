@@ -87,7 +87,7 @@ class LoginOrSignupPage:
     @allure.step("Fill the account creation form")
     def fill_account_details(self, user: User):
         logger.info("Filling account details")
-        birth_date = user.date_of_birth or ("1", "2", "2008")
+        birth_date = user.birth_date_parts or ("1", "2", "2008")
         self.page.get_by_role(**self.TITLE_MR_RADIO).check()
         self.page.get_by_role(**self.SIGNUP_PASSWORD_INPUT).fill(user.password)
         self.page.get_by_role(**self.NEWSLETTER_CHECKBOX).check()
@@ -101,8 +101,8 @@ class LoginOrSignupPage:
         self.page.get_by_label(**self.COUNTRY_SELECT).select_option(user.country or "")
         self.page.get_by_role(**self.STATE_INPUT).fill(user.state or "")
         self.page.get_by_role(**self.CITY_INPUT).fill(user.city or "")
-        self.page.locator(**self.ZIPCODE_INPUT).fill(user.zip or user.zipcode or "")
-        self.page.get_by_role(**self.MOBILE_INPUT).fill(user.mobile or user.mobile_number or "")
+        self.page.locator(**self.ZIPCODE_INPUT).fill(user.zipcode or "")
+        self.page.get_by_role(**self.MOBILE_INPUT).fill(user.mobile_number or "")
 
     @allure.step("Enter an invalid email for validation")
     def enter_invalid_email(self, invalid_email: str):
