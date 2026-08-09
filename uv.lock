@@ -65,7 +65,7 @@ requires-dist = [
     { name = "pytest-xdist", specifier = ">=3.8.0" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
     { name = "retrying", specifier = ">=1.4.2" },
-    { name = "ruff", specifier = ">=0.14.10" },
+    { name = "ruff", specifier = "==0.14.10" },
 ]
 
 [[package]]
