@@ -1,12 +1,13 @@
 import allure
 import logging
 from urllib.parse import urlencode, parse_qs
-from playwright.sync_api import Page, Route, expect
+from playwright.sync_api import Route, expect
+from pages.base_page import BasePage
 from test_data.user import User
 
 logger = logging.getLogger(__name__)
 
-class LoginOrSignupPage:
+class LoginOrSignupPage(BasePage):
 
     NAME_INPUT = {"role": "textbox", "name": "Name"}
     EMAIL_INPUT = {"text": "Email Address"}
@@ -27,10 +28,6 @@ class LoginOrSignupPage:
     MOBILE_INPUT = {"role": "textbox", "name": "Mobile Number *"}
     CREATE_ACCOUNT_BUTTON = {"role": "button", "name": "Create Account"}
     CONTINUE_LINK = {"role": "link", "name": "Continue"}
-
-
-    def __init__(self, page: Page):
-        self.page = page
 
     @allure.step("Log in with the provided user credentials")
     def login(self, user: User):

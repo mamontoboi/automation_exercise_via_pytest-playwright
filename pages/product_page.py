@@ -1,14 +1,15 @@
 import allure
 import logging
-from playwright.sync_api import Page, expect
+from playwright.sync_api import expect
+from pages.base_page import BasePage
 from pages.cart_page import CartPage
 from pytest_check import check
 from test_data.users import EXISTING_USER
 
 logger = logging.getLogger(__name__)
 
-class ProductPage:
-    
+class ProductPage(BasePage):
+
     PRODUCT_INFORMATION_CONTAINER = 'div.product-information'
     QUANTITY_INPUT = "input#quantity"
     ADD_TO_CART_BUTTON = "button[type='button'].cart"
@@ -18,9 +19,6 @@ class ProductPage:
     REVIEW_CONTAINER_HEADER = {"role": "link", "name": "Write Your Review"}
     REVIEW_INPUT_FIELD = {"role": "textbox", "name": "Add Review Here!"}
     SUBMIT_BUTTON = {"role": "button", "name": "Submit"}
-
-    def __init__(self, page: Page):
-        self.page = page
 
     @allure.step("Verify the product details section is visible")
     def check_visibility_of_product_details(self):
