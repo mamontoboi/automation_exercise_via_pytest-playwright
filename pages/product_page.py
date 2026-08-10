@@ -3,7 +3,6 @@ import logging
 from playwright.sync_api import expect
 from pages.base_page import BasePage
 from pages.cart_page import CartPage
-from pytest_check import check
 from test_data.users import EXISTING_USER
 
 logger = logging.getLogger(__name__)
@@ -34,7 +33,7 @@ class ProductPage(BasePage):
 
     @allure.step("Verify the review section header is visible")
     def check_visibility_of_review_header(self):
-        check.is_true(self.page.get_by_role(**self.REVIEW_CONTAINER_HEADER).is_visible())
+        expect(self.page.get_by_role(**self.REVIEW_CONTAINER_HEADER)).to_be_visible()
 
     @allure.step("Increase the product quantity using the quantity control")
     def increase_quantity_by_arrow(self):
