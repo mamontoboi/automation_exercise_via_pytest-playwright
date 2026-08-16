@@ -2,6 +2,7 @@ import logging
 import allure
 import requests
 from endpoints.base_endpoint import BaseEndpoint
+from test_data.schemas import BRAND_LIST_SCHEMA
 
 logger = logging.getLogger(__name__)
 
@@ -34,12 +35,9 @@ class AllBrandsAPI(BaseEndpoint):
         assert len(self.response_json) > 0
         return self
 
-    @allure.step("Validate the brand schema in the response")
+    @allure.step("Validate the brand list response schema")
     def check_brands_schema(self):
-        logger.info("Checking the brand schema")
-        for brand in self.brands:
-            assert "id" in brand
-            assert "brand" in brand
-        return self
+        logger.info("Checking the brand list response schema")
+        return self.check_response_schema(BRAND_LIST_SCHEMA)
 
 

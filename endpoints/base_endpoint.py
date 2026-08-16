@@ -2,6 +2,7 @@ import json
 import logging
 import pytest
 import allure
+from jsonschema import validate, ValidationError
 
 logger = logging.getLogger(__name__)
 
@@ -68,5 +69,16 @@ class BaseEndpoint:
             assert actual_code == expected_code, f"The actual code: {actual_code}"
         except AssertionError:
             self._attach_response_details("response_code")
+            raise
+        return self
+
+    @allure.step("Validate the response JSON against a schema")
+    def check_response_schema(self, schema: dict):
+        logger.info("Validating the response against the JSON schema")
+        try:
+            assert self.response_json is not None, "Response is not set"
+            validate(instance=self.response_json, schema=schema)
+        except (AssertionError, ValidationError):
+            self._attach_response_details("schema")
             raise
         return self

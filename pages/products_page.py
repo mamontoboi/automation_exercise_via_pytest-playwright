@@ -22,7 +22,7 @@ class ProductsPage(BasePage):
     @allure.step("Open the details page of the first product")
     def go_to_first_product_details(self):
         logging.info("Navigating to first product details page")
-        self.page.get_by_role("link", name=" View Product").first.click()
+        self.page.get_by_role(**self.VIEW_PRODUCT_BUTTON).first.click()
         return ProductPage(self.page)
 
     @allure.step("Search for a product by name")

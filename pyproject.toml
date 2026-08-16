@@ -7,6 +7,7 @@ requires-python = ">=3.14"
 dependencies = [
     "allure-pytest>=2.16.0",
     "faker>=40.4.0",
+    "jsonschema>=4.23.0",
     "pytest-check>=2.8.0",
     "pytest-html>=4.1.1",
     "pytest-playwright>=0.7.2",

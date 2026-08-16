@@ -1,6 +1,7 @@
 import logging
 import allure
 from endpoints.base_endpoint import BaseEndpoint
+from test_data.schemas import PRODUCT_LIST_SCHEMA
 
 logger = logging.getLogger(__name__)
 
@@ -19,20 +20,9 @@ class ProductAPI(BaseEndpoint):
         assert len(self.products) > 0
         return self
 
-    @allure.step("Validate the product schema in the response")
+    @allure.step("Validate the product list response schema")
     def check_products_schema(self):
-        logger.info("Checking the product schema")
-        for product in self.products:
-            assert "id" in product
-            assert "name" in product
-            assert "price" in product
-            assert "brand" in product
-            assert "category" in product
-
-            category = product["category"]
-            assert "category" in category
-            assert "usertype" in category
-            assert "usertype" in category["usertype"]
-        return self
+        logger.info("Checking the product list response schema")
+        return self.check_response_schema(PRODUCT_LIST_SCHEMA)
 
 
