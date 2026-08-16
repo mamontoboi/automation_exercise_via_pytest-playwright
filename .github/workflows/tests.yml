@@ -70,8 +70,8 @@ jobs:
               --tracing retain-on-failure \
               --screenshot only-on-failure \
               --alluredir=/app/allure-results \
-              --reruns 3 \
-              --reruns-delay 2
+              --reruns 1 \
+              --reruns-delay 1
 
       - if: failure() || steps.tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
@@ -124,8 +124,8 @@ jobs:
               --html=reports/html/report-api.html \
               --self-contained-html \
               --alluredir=/app/allure-results \
-              --reruns 3 \
-              --reruns-delay 2
+              --reruns 1 \
+              --reruns-delay 1
 
       - if: failure() || steps.tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
