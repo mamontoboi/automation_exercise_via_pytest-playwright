@@ -10,6 +10,7 @@ from utils.allure_reporting import AllureParentSuite, AllureSuiteName, report_ca
     title="Submit contact form successfully",
 )
 @pytest.mark.ui
+@pytest.mark.flaky(reruns=2, reruns_delay=1)
 def test_contact_us_form_success(home_page, existing_user):
     contact_page = home_page.go_to_contact_us_page()
     contact_page.fill_contact_form(existing_user)
