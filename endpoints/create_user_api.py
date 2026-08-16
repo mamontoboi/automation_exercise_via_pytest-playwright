@@ -17,6 +17,9 @@ class Title(Enum):
     Miss = "Miss"
 
 
+# The signup form's country <select> only offers this fixed set of options.
+COUNTRIES = ["India", "United States", "Canada", "Australia", "Israel", "New Zealand", "Singapore"]
+
 faker = Faker()
 
 
@@ -43,7 +46,7 @@ class CreateUser(BaseEndpoint):
             company=faker.sentence(ext_word_list=["International", "Management", "Leading", "GmbH"]),
             address=faker.address(),
             zipcode=faker.zipcode(),
-            country=faker.country(),
+            country=random.choice(COUNTRIES),
             city=faker.city(),
             state=faker.state(),
             mobile_number=faker.phone_number(),

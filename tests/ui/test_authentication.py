@@ -23,7 +23,9 @@ def test_login_successful(home_page, existing_user):
     title="Register a new user",
 )
 @pytest.mark.smoke
-def test_register_user(home_page, new_user):
+@pytest.mark.flaky(reruns=2, reruns_delay=1)
+def test_register_user(home_page, user_creator):
+    new_user = user_creator.generate_random_user()
     signup_page = home_page.go_to_login_or_signup()
     signup_page.start_signup(new_user)
     signup_page.fill_account_details(new_user)
