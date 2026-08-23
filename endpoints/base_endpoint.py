@@ -72,6 +72,18 @@ class BaseEndpoint:
             raise
         return self
 
+    @allure.step("Check the detail message of the response")
+    def check_detail_from_response_json(self, expected_detail):
+        logger.info(f"Checking that the detail in the response is: {expected_detail}")
+        try:
+            assert self.response_json is not None, "Response is not set"
+            actual_detail = self.response_json["detail"]
+            assert actual_detail == expected_detail, f"The actual detail: {actual_detail}"
+        except AssertionError:
+            self._attach_response_details("detail")
+            raise
+        return self
+
     @allure.step("Validate the response JSON against a schema")
     def check_response_schema(self, schema: dict):
         logger.info("Validating the response against the JSON schema")

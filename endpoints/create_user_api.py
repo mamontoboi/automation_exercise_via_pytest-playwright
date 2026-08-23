@@ -89,3 +89,41 @@ class CreateUser(BaseEndpoint):
         )
         self.response_json = self.response.json()
         return self
+
+    @allure.step("Attempt to delete a user that was never created")
+    def delete_nonexistent_user(self):
+        logger.info("Deleting a user that does not exist")
+        self.response = requests.delete(
+            self.DELETE_USER_URL,
+            data={"email": faker.email(), "password": "irrelevant"},
+        )
+        self.response_json = self.response.json()
+        return self
+
+    @allure.step("Create a user with the name field missing")
+    def post_create_user_missing_name(self, user: User | None = None):
+        logger.info("Creating a user with a missing name field")
+        if user is None:
+            user = self.generate_random_user()
+        elif user not in self.created_users:
+            self.created_users.append(user)
+
+        payload = user.to_create_account_payload()
+        del payload["name"]
+        self.response = requests.post(self.CREATE_USER_URL, data=payload)
+        self.response_json = self.response.json()
+        return self
+
+    @allure.step("Send an unsupported GET request to the create account endpoint")
+    def get_create_account(self):
+        logger.info("Sending GET request to the create account endpoint")
+        self.response = requests.get(self.CREATE_USER_URL)
+        self.response_json = self.response.json()
+        return self
+
+    @allure.step("Send an unsupported GET request to the delete account endpoint")
+    def get_delete_account(self):
+        logger.info("Sending GET request to the delete account endpoint")
+        self.response = requests.get(self.DELETE_USER_URL)
+        self.response_json = self.response.json()
+        return self
