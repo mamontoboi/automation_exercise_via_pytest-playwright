@@ -1,6 +1,6 @@
 import allure
 import logging
-from playwright.sync_api import expect
+from playwright.sync_api import Route, expect
 
 from pages.base_page import BasePage
 from pages.login_or_signup_page import LoginOrSignupPage
@@ -26,6 +26,8 @@ class HomePage(BasePage, SubscriptionMixin):
     RECOMMENDED_ITEMS_CAROUSEL = "#recommended-item-carousel"
     RECOMMENDED_SECTION_HEADING = {"role": "heading", "name": "recommended items"}
     VIEW_CART_LINK = {"role": "link", "name": "View Cart"}
+    BRANDS_HEADING = {"role": "heading", "name": "Brands"}
+    BRANDS_LIST = ".brands_products ul.nav-pills.nav-stacked"
 
     @allure.step("Open the home page")
     def open(self):
@@ -39,6 +41,29 @@ class HomePage(BasePage, SubscriptionMixin):
         if btn.is_visible():
             logger.info("Accepting cookies")
             btn.click()
+
+    @allure.step("Mock the home page response with an empty brands list")
+    def mock_empty_brands_list(self):
+        logger.info("Intercepting the home page document to strip the brands list")
+
+        def strip_brands_list(route: Route):
+            if route.request.resource_type != "document":
+                route.continue_()
+                return
+            response = route.fetch()
+            body = response.text()
+            start = body.find('<ul class="nav nav-pills nav-stacked">')
+            end = body.find("</ul>", start) + len("</ul>")
+            body = body[:start] + '<ul class="nav nav-pills nav-stacked"></ul>' + body[end:]
+            route.fulfill(response=response, body=body)
+
+        self.page.route(self.UAT_URL, strip_brands_list, times=1)
+
+    @allure.step("Verify the brands list is empty")
+    def assert_brands_list_is_empty(self):
+        logger.info("Checking that the brands list has no items")
+        expect(self.page.get_by_role(**self.BRANDS_HEADING)).to_be_visible()
+        expect(self.page.locator(self.BRANDS_LIST).locator("li")).to_have_count(0)
 
     @allure.step("Navigate to the login or signup page")
     def go_to_login_or_signup(self):
