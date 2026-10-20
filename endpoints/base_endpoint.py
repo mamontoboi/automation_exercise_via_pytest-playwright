@@ -1,12 +1,10 @@
 import json
 import logging
-import pytest
 import allure
 from jsonschema import validate, ValidationError
 
 logger = logging.getLogger(__name__)
 
-@pytest.mark.api
 class BaseEndpoint:
 
     BASE_URL = "https://automationexercise.com/api"

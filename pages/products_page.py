@@ -55,7 +55,7 @@ class ProductsPage(BasePage):
         self.add_product(1)
 
     @allure.step("Continue shopping after adding a product")
-    def continue_shoping(self):
+    def continue_shopping(self):
         logging.info("Continue shopping")
         continue_shopping_button = self.page.get_by_text(self.CONTINUE_SHOPPING)
         expect(continue_shopping_button).to_be_visible()

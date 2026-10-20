@@ -18,8 +18,9 @@ wheels/
 # Report folders
 reports/
 test-results/
-allure-report
-allure-results
+allure-report*
+allure-results*
 
 # Local variables
 .env
+cheatsheet.local.md

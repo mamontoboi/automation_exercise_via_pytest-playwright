@@ -179,8 +179,38 @@ docker build -t automation-tests .
 
 ### Run tests
 
+The image contains the code and dependencies but **not** `.env` (see `.dockerignore`), so credentials are passed at runtime:
+
 ```bash
-docker run --rm automation-tests
+docker run --rm --env-file .env automation-tests
+```
+
+`.env` format for `--env-file`: plain `KEY=value` lines, **no quotes** and no `export` (Docker keeps quotes literally). Spaces inside a value are fine, e.g. `NAME=John Doe`.
+
+Without a `.env` file, pass the values explicitly and quote any value containing spaces:
+
+```bash
+docker run --rm -e NAME="John Doe" -e EMAIL=john@test.com -e PASSWORD=secret automation-tests
+```
+
+### Run a subset
+
+Anything after the image name replaces the default command (`uv run pytest`):
+
+```bash
+docker run --rm --env-file .env automation-tests uv run pytest -m api -n auto
+docker run --rm --env-file .env automation-tests uv run pytest -m "smoke or ui"
+```
+
+### Get reports out of the container
+
+Mount the output folders, then open the report on the host with `allure generate` / `allure open`:
+
+```bash
+docker run --rm --env-file .env \
+  -v "$(pwd)/reports:/app/reports" \
+  -v "$(pwd)/allure-results:/app/allure-results" \
+  automation-tests uv run pytest --alluredir=/app/allure-results
 ```
 
 ---

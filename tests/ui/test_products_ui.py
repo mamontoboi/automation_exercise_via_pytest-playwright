@@ -43,7 +43,7 @@ def test_add_products_to_cart(home_page):
     all_products_page = home_page.go_to_products_page()
     all_products_page.check_header_text("All Products")
     all_products_page.add_first_product()
-    all_products_page.continue_shoping()
+    all_products_page.continue_shopping()
     all_products_page.add_second_product()
     cart_page = all_products_page.open_cart()
     cart_page.check_number_of_items_in_cart(2)
